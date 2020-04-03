@@ -28,9 +28,10 @@ class PositAdder(nBits: Int, eBits: Int) extends Module {
   val smallerExp  = Mux(aGTb, decB.scale, decA.scale).asSInt
   val greaterFrac = Mux(aGTb, decA.fraction, decB.fraction)
   val smallerFrac = Mux(aGTb, decB.fraction, decA.fraction)
+  val smallerZero = Mux(aGTb, decB.isZero, decA.isZero)
   val scale_diff  = greaterExp - smallerExp
   val greaterSig  = Cat(greaterSign, ~greaterSign, greaterFrac)
-  val smallerSig  = Cat(smallerSign, ~smallerSign, smallerFrac, 
+  val smallerSig  = Cat(smallerSign, ~(smallerSign | smallerZero), smallerFrac, 
                         0.U(3.W)).shiftRightArithSticky(scale_diff.asUInt)
   val rawSumSig   = greaterSig +& smallerSig(fracWidth + 4, 3)
   val sumSign     = decA.sign ^ decB.sign ^ rawSumSig.head(1)
