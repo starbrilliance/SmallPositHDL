@@ -17,7 +17,8 @@ class PositFMATest(c: PositFMA) extends PeekPokeTester(c) {
             BigInt("01100100100010000000000000000000", 2),   // 36.25
             BigInt("01100100100010000000000000000000", 2),   // 36.25
             BigInt("11000000000000000000000000000000", 2),   // -1
-            BigInt("01111001001110001000011000000000", 2)    // 10000.75
+            BigInt("01111001001110001000011000000000", 2),  // 10000.75
+            BigInt("11000000000000000000000000000000", 2)    // -1
           )
   val y = List(
             BigInt("01101111000010000000000000000000", 2),   // 225
@@ -30,7 +31,8 @@ class PositFMATest(c: PositFMA) extends PeekPokeTester(c) {
             BigInt("01000000000000000000000000000000", 2),   // 1
             BigInt("00000000000000000000000000000000", 2),   // 0
             BigInt("01000000000000000000000000000000", 2),   // 1
-            BigInt("01101111000010000000000000000000", 2)    // 225
+            BigInt("01101111000010000000000000000000", 2),  // 225
+            BigInt("11000000000000000000000000000000", 2)    // -1
           )
   val z = List(
             BigInt("00000000000000000000000000000001", 2),   // 2^-120
@@ -43,7 +45,8 @@ class PositFMATest(c: PositFMA) extends PeekPokeTester(c) {
             BigInt("01100100100010000000000000000000", 2),   // 36.25
             BigInt("00000000000000000000000000000000", 2),   // 0
             BigInt("01000000000000000000000000000000", 2),   // 1
-            BigInt("00000000000000000000000000000001", 2)    // 2^-120
+            BigInt("00000000000000000000000000000001", 2),  // 2^-120
+            BigInt("11000000000000000000000000000000", 2)    // -1
           )
 
   val out = List(
@@ -57,7 +60,8 @@ class PositFMATest(c: PositFMA) extends PeekPokeTester(c) {
               BigInt("00000000000000000000000000000000", 2),   // x(7) * y(7) - z(7) == 0
               BigInt("00000000000000000000000000000000", 2),   // x(8) * y(8) + z(8)
               BigInt("00000000000000000000000000000000", 2),   // x(9) * y(9) + z(9)
-              BigInt("01111110010001001010101101110001", 2)    // x(10) * y(10) - z(10) == x(10) * y(10)
+              BigInt("01111110010001001010101101110001", 2),  // x(10) * y(10) - z(10) == x(10) * y(10)
+              BigInt("00000000000000000000000000000000", 2)    // x(11) * y(11) + z(11)
             )
 
   val ambpc  = 0 
@@ -65,7 +69,7 @@ class PositFMATest(c: PositFMA) extends PeekPokeTester(c) {
   val nambpc = 2 
   val nambsc = 3 
 
-  val opCode = List(ambpc, ambpc, ambpc, ambsc, ambpc, ambpc, ambpc, ambsc, ambpc, ambpc, ambsc)
+  val opCode = List(ambpc, ambpc, ambpc, ambsc, ambpc, ambpc, ambpc, ambsc, ambpc, ambpc, ambsc, ambpc)
 
   for(i <- 0 until (x.length + 1)) {
 		poke(c.io.inValid, 1)

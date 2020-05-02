@@ -20,7 +20,7 @@ class PositFMA(nBits: Int, eBits: Int, latency: Int = 2) extends Module {
   val fracWidth   = nBits - eBits - 3
   val sigWidth    = fracWidth + 1
   val maxScale    = (1 << eBits) * (nBits - 2)
-  val minScale    = -maxScale
+  val minScale    = -maxScale - 1
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////////              io              ///////////////////////

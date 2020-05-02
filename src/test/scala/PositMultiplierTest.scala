@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.iotesters._
 import posit.rtl._
 import org.scalatest.{FlatSpec, Matchers}
-
+/*
 // posit<32, 2>
 class PositMultiplierTest(c: PositMultiplier) extends PeekPokeTester(c) {
   val x = List(
@@ -51,6 +51,35 @@ class PositMultiplierTest(c: PositMultiplier) extends PeekPokeTester(c) {
   }
 	step(5)
 }
+*/
+// posit<32, 0>
+class PositMultiplierTest(c: PositMultiplier) extends PeekPokeTester(c) {
+  val x = List(
+            BigInt("01011000000000000000000000000000", 2),   // minpos
+            BigInt("11111111111111111111111111111111", 2),   // -minpos
+            BigInt("11111111111111111111111111111111", 2),   // -minpos
+            BigInt("00111000000000000000000000000000", 2)    // minpos
+          )
+  val y = List(
+            BigInt("00000000000000000000000000000001", 2),   // minpos
+            BigInt("01011000000000000000000000000000", 2),   // minpos
+            BigInt("00111000000000000000000000000000", 2),   // minpos
+            BigInt("00000000000000000000000000000001", 2)    // minpos
+          )
+  val z = List(
+						BigInt("00000000000000000000000000000010", 2),   // minpos
+            BigInt("11111111111111111111111111111110", 2),   // -minpos
+            BigInt("11111111111111111111111111111111", 2),   // -minpos
+            BigInt("00000000000000000000000000000001", 2)    // minpos
+          )
+  for(i <- 0 until x.length) {
+    poke(c.io.A, x(i))
+    poke(c.io.B, y(i))
+    step(1)
+    expect(c.io.M, z(i))
+  }
+	step(5)
+}
 
 class PositMulSpec extends FlatSpec with Matchers {
 
@@ -69,7 +98,7 @@ class PositMulSpec extends FlatSpec with Matchers {
   behavior of "posit multiplier module"
 
   it should "properly multiply posit types" in {
-    chisel3.iotesters.Driver.execute(() => new PositMultiplier(32, 2), testOptions) { c =>
+    chisel3.iotesters.Driver.execute(() => new PositMultiplier(32, 0), testOptions) { c =>
       new PositMultiplierTest(c)
     } should be (true)
   }

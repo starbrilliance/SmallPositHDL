@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.iotesters._
 import posit.rtl._
 import org.scalatest.{FlatSpec, Matchers}
-
+/*
 class PositDivSqrtTest(c: PositDivisionSqrt) extends PeekPokeTester(c) {
   val x = List(
 						BigInt("01000000000000000000000000000000", 2),   // 1
@@ -90,6 +90,34 @@ class PositDivSqrtTest(c: PositDivisionSqrt) extends PeekPokeTester(c) {
     step(5)
   }
 }
+*/
+
+class PositDivSqrtTest(c: PositDivisionSqrt) extends PeekPokeTester(c) {
+  val x = List(
+            BigInt("00010010", 2),    // minpos
+            BigInt("01011100", 2),    // minpos
+            BigInt("00101101", 2),    // minpos
+            BigInt("01100101", 2)     // minpos
+          )
+  val z_sqrt = List(
+                BigInt("00100010", 2),    // 2^-60
+                BigInt("01001100", 2),    // 2^-60 
+                BigInt("00110110", 2),    // 2^-60 
+                BigInt("01010100", 2)     // 2^-60               
+              )
+
+
+  for(i <- 0 until x.length) {
+    poke(c.io.A, x(i))
+    poke(c.io.inValid, 1)
+    poke(c.io.sqrtOp, 1)
+    step(1)
+    poke(c.io.inValid, 0)
+    step(9)
+    expect(c.io.Q, z_sqrt(i))
+    step(5)
+  }
+}
 
 // Scala style testing
 class PositDivSqrtSpec extends FlatSpec with Matchers {
@@ -109,7 +137,7 @@ class PositDivSqrtSpec extends FlatSpec with Matchers {
   behavior of "posit divsqrt module"
 
   it should "properly div/sqrt posit types" in {
-    chisel3.iotesters.Driver.execute(() => new PositDivisionSqrt(32, 2), testOptions) { c =>
+    chisel3.iotesters.Driver.execute(() => new PositDivisionSqrt(8, 0), testOptions) { c =>
       new PositDivSqrtTest(c)
     } should be (true)
   }

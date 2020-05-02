@@ -21,7 +21,7 @@ class QuireToPosit(capacity: Int, nBits: Int, eBits: Int) extends Module {
   val fracWidth   = nBits - eBits - 3
   val sigWidth    = fracWidth + 1
   val maxScale    = (1 << eBits) * (nBits - 2)
-  val minScale    = -maxScale
+  val minScale    = -maxScale - 1
   // quire
   val lower       = 2 * maxScale
   val upper       = lower + 1

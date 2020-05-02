@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.iotesters._
 import posit.rtl._
 import org.scalatest.{FlatSpec, Matchers}
-
+/*
 class PositAdderTest(c: PositAdder) extends PeekPokeTester(c) {
   val x = List(
             BigInt("01011001100000000000000000000000", 2),   // 9.5
@@ -59,6 +59,25 @@ class PositAdderTest(c: PositAdder) extends PeekPokeTester(c) {
   }
 	step(5)
 }
+*/
+class PositAdderTest(c: PositAdder) extends PeekPokeTester(c) {
+  val x = List(
+            BigInt("00000000000000000000000000000000", 2)   // 0
+          )
+  val y = List(          
+            BigInt("11111111111111111111111111111111", 2)   // 2^-120
+          )
+  val z = List(
+            BigInt("11111111111111111111111111111111", 2)   // 2^-120
+          )
+  for(i <- 0 until x.length) {
+    poke(c.io.A, x(i))
+    poke(c.io.B, y(i))
+    step(1)
+    expect(c.io.S, z(i))
+  }
+	step(5)
+}
 
 
 class PositAdderSpec extends FlatSpec with Matchers {
@@ -78,7 +97,7 @@ class PositAdderSpec extends FlatSpec with Matchers {
   behavior of "posit adder module"
 
   it should "properly add posit types" in {
-    chisel3.iotesters.Driver.execute(() => new PositAdder(32, 2), testOptions) { c =>
+    chisel3.iotesters.Driver.execute(() => new PositAdder(32, 0), testOptions) { c =>
       new PositAdderTest(c)
     } should be (true)
   }

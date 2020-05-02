@@ -34,7 +34,7 @@ class PositMultiplier(nBits: Int, eBits: Int) extends Module {
 	// parameters
 	val fracWidth = nBits - eBits - 3
   val maxScale  = (1 << eBits) * (nBits - 2)
-  val minScale  = -maxScale
+  val minScale  = -maxScale - 1
 
 
   val decA = RawFloatFromPosit(io.A, nBits, eBits)
